@@ -1987,19 +1987,7 @@ def render_feishu_content(
     """渲染飞书内容"""
     text_content = ""
 
-    if not text_content:
-        if mode == "incremental":
-            mode_text = "增量模式下暂无新增匹配的热点词汇"
-        elif mode == "current":
-            mode_text = "当前榜单模式下暂无匹配的热点词汇"
-        else:
-            mode_text = "暂无匹配的热点词汇"
-        text_content = f"📭 {mode_text}\n\n"
-
     if report_data["new_titles"]:
-        if text_content and "暂无匹配" not in text_content:
-            text_content += f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n"
-
         text_content += (
             f"🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
         )
@@ -2020,20 +2008,22 @@ def render_feishu_content(
             text_content += "\n"
 
     if report_data["failed_ids"]:
-        if text_content and "暂无匹配" not in text_content:
+        if text_content:
             text_content += f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n"
-
-        text_content += "⚠️ **数据获取失败的平台：**\n\n"
+        else:
+            text_content += "⚠️ **数据获取失败的平台：**\n\n"
+            
         for i, id_value in enumerate(report_data["failed_ids"], 1):
             text_content += f"  • <font color='red'>{id_value}</font>\n"
 
-    now = get_beijing_time()
-    text_content += (
-        f"\n\n<font color='grey'>更新时间：{now.strftime('%Y-%m-%d %H:%M:%S')}</font>"
-    )
+    if text_content:
+        now = get_beijing_time()
+        text_content += (
+            f"\n\n<font color='grey'>更新时间：{now.strftime('%Y-%m-%d %H:%M:%S')}</font>"
+        )
 
-    if update_info:
-        text_content += f"\n<font color='grey'>TrendRadar 发现新版本 {update_info['remote_version']}，当前 {update_info['current_version']}</font>"
+        if update_info:
+            text_content += f"\n<font color='grey'>TrendRadar 发现新版本 {update_info['remote_version']}，当前 {update_info['current_version']}</font>"
 
     return text_content
 
