@@ -1839,13 +1839,7 @@ def render_html_content(
             
             html += f"""
                 <div class="word-group">
-                    <div class="word-header">
-                        <div class="word-info">
-                            <div class="word-name">{escaped_word}</div>
-                            <div class="word-count {count_class}">{count} 条</div>
-                        </div>
-                        <div class="word-index">{i}/{total_count}</div>
-                    </div>"""
+                    """
 
             # 处理每个词组下的新闻标题，给每条新闻标上序号
             for j, title_data in enumerate(stat["titles"], 1):
